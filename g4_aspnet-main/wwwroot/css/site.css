@@ -1,0 +1,18 @@
+/* Bootstrap lleva el estilo de la plantilla. Solo se añade el avatar, que no existe
+   como componente nativo y será común a todos los proyectos de grupo. */
+.avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bs-primary);
+  color: var(--bs-white);
+  font-size: .8rem;
+  font-weight: 700;
+}

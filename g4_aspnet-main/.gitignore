@@ -1,0 +1,51 @@
+# Build output
+**/bin/
+**/obj/
+**/out/
+
+# Visual Studio / Rider / VS Code
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.rsuser
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# Test and coverage output
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# ASP.NET local data and secrets
+**/App_Data/*.db
+**/App_Data/*.db-shm
+**/App_Data/*.db-wal
+appsettings.Local.json
+secrets.json
+
+# Avatares subidos localmente
+wwwroot/uploads/*
+!wwwroot/uploads/avatars/
+wwwroot/uploads/avatars/*
+!wwwroot/uploads/avatars/.gitkeep
+
+# Logs and local environment files
+*.log
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# NuGet and generated assets
+*.nupkg
+*.snupkg
+packages/
+artifacts/

@@ -1,0 +1,56 @@
+@model EditUserViewModel
+@inject ImageStorage ImageStorage
+@{
+    ViewData["Title"] = "Editar usuario";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h2 mb-0">Editar usuario</h1>
+    <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id">Cancelar</a>
+</div>
+
+<form method="post" class="card">
+    <input asp-for="Id" type="hidden" />
+    <div class="card-body p-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        @if (ImageStorage.GetUrl(Model.CurrentAvatarFileName) is string avatarUrl)
+        {
+            <img class="avatar mb-3" src="@avatarUrl" alt="Avatar actual" />
+        }
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="DisplayName" class="form-label"></label>
+                <input asp-for="DisplayName" class="form-control" />
+                <span asp-validation-for="DisplayName" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Role" class="form-label"></label>
+                <select asp-for="Role" class="form-select">
+                    <option value="@RoleNames.User">@RoleNames.User</option>
+                    <option value="@RoleNames.Admin">@RoleNames.Admin</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="NewPassword" class="form-label"></label>
+                <input asp-for="NewPassword" class="form-control" autocomplete="new-password" />
+                <span asp-validation-for="NewPassword" class="text-danger"></span>
+            </div>
+            <div class="col-12">
+                <div class="form-check">
+                    <input asp-for="IsActive" class="form-check-input" />
+                    <label asp-for="IsActive" class="form-check-label"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer bg-transparent text-end"><button class="btn btn-primary" type="submit">Guardar cambios</button></div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

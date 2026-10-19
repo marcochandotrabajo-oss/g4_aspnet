@@ -1,0 +1,21 @@
+@model ProfileViewModel
+@{
+    ViewData["Title"] = "Eliminar usuario";
+    var name = Model.User.DisplayName ?? Model.User.UserName ?? "Usuario";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card border-danger">
+            <div class="card-body p-4">
+                <h1 class="h3 text-danger">Eliminar usuario</h1>
+                <p>Vas a eliminar la cuenta <strong>@name</strong>. Esta acción no se puede deshacer.</p>
+                <p class="small text-secondary">La aplicación no permite borrar tu propia cuenta ni dejar el sistema sin administradores.</p>
+                <form asp-action="Delete" asp-route-id="@Model.User.Id" method="post" class="d-flex gap-2">
+                    <button class="btn btn-danger" type="submit">Eliminar definitivamente</button>
+                    <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.User.Id">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

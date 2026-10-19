@@ -1,0 +1,37 @@
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<section class="py-4 py-lg-5">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <p class="text-primary text-uppercase fw-semibold small mb-2">Grupo 4</p>
+            <h1 class="display-5 fw-bold">G4 ASP.NET</h1>
+            <p class="lead text-secondary">La infraestructura transversal ya está preparada. El equipo añadirá las entidades, asociaciones, servicios, controladores y vistas del dominio del proyecto.</p>
+            <div class="d-flex flex-wrap gap-2">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a class="btn btn-primary" asp-controller="Profile" asp-action="Index">Ver mi perfil</a>
+                }
+                else
+                {
+                    <a class="btn btn-primary" asp-controller="Account" asp-action="Register">Crear cuenta</a>
+                    <a class="btn btn-outline-primary" asp-controller="Account" asp-action="Login">Iniciar sesión</a>
+                }
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="h5">Incluido desde el primer día</h2>
+                    <ul class="mb-0 ps-3">
+                        <li>Identity, roles y login por cookie</li>
+                        <li>SQLite y Entity Framework Core</li>
+                        <li>Perfil, avatar y cambio de contraseña</li>
+                        <li>Administración de usuarios</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

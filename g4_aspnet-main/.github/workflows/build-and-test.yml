@@ -1,0 +1,37 @@
+name: Build and test .NET
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_VERSION: 10.0.x
+
+jobs:
+  build-and-test:
+    name: Build and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install .NET ${{ env.DOTNET_VERSION }}
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore G4AspNet.sln
+
+      - name: Build in Release
+        run: dotnet build G4AspNet.sln --configuration Release --no-restore
+
+      - name: Run unit tests
+        run: dotnet test G4AspNet.sln --configuration Release --no-build --verbosity normal

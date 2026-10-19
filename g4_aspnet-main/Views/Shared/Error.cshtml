@@ -1,0 +1,13 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="alert alert-danger">
+    <h1 class="h3">Se ha producido un error.</h1>
+    <p>La aplicación no ha podido completar la petición.</p>
+    @if (Model.ShowRequestId)
+    {
+        <p class="mb-0"><strong>Identificador de petición:</strong> <code>@Model.RequestId</code></p>
+    }
+</div>

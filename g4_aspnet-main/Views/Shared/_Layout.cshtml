@@ -1,0 +1,120 @@
+@inject UserManager<ApplicationUser> UserManager
+@inject ImageStorage ImageStorage
+@{
+    var currentUser = User.Identity?.IsAuthenticated == true
+        ? await UserManager.GetUserAsync(User)
+        : null;
+    var currentName = currentUser?.DisplayName ?? User.Identity?.Name ?? "Usuario";
+    var initial = string.IsNullOrWhiteSpace(currentName) ? "U" : currentName[..1].ToUpperInvariant();
+    var activeController = ViewContext.RouteData.Values["controller"]?.ToString();
+    string NavClass(string controller) => string.Equals(activeController, controller, StringComparison.OrdinalIgnoreCase)
+        ? "nav-link active"
+        : "nav-link";
+}
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(ViewData["Title"] is null ? "G4 ASP.NET" : $"{ViewData["Title"]} · G4 ASP.NET")</title>
+    <script>
+        (() => {
+            const savedTheme = localStorage.getItem("g4-theme");
+            const theme = savedTheme === "dark" || savedTheme === "light"
+                ? savedTheme
+                : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+            document.documentElement.setAttribute("data-bs-theme", theme);
+        })();
+    </script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header class="border-bottom">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container">
+                <a class="navbar-brand fw-semibold" asp-controller="Home" asp-action="Index">G4 ASP.NET</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav"
+                        aria-expanded="false" aria-label="Mostrar navegación">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class='@NavClass("Home")' asp-controller="Home" asp-action="Index">Inicio</a></li>
+                        @if (User.IsInRole(RoleNames.Admin))
+                        {
+                            <li class="nav-item"><a class='@NavClass("Users")' asp-controller="Users" asp-action="Index">Administración de usuarios</a></li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav align-items-lg-center gap-lg-2">
+                        <li class="nav-item">
+                            <button class="btn btn-outline-secondary btn-sm" type="button" data-theme-toggle aria-pressed="false">
+                                <span data-theme-label>Tema</span>
+                                <span class="visually-hidden" data-theme-sr-label>Cambiar el tema visual</span>
+                            </button>
+                        </li>
+                        @if (currentUser is not null)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @if (ImageStorage.GetUrl(currentUser.AvatarFileName) is string avatarUrl)
+                                    {
+                                        <img class="avatar" src="@avatarUrl" alt="Avatar de @currentName" />
+                                    }
+                                    else
+                                    {
+                                        <span class="avatar avatar-placeholder">@initial</span>
+                                    }
+                                    <span>@currentName</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" asp-controller="Profile" asp-action="Index">Mi perfil</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Profile" asp-action="Edit">Editar perfil</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <form asp-controller="Account" asp-action="Logout" method="post">
+                                            <button class="dropdown-item text-danger" type="submit">Cerrar sesión</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Login">Iniciar sesión</a></li>
+                            <li class="nav-item"><a class="btn btn-primary btn-sm" asp-controller="Account" asp-action="Register">Crear cuenta</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container py-4 flex-grow-1">
+        @if (TempData["Message"] is string message)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @message
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        }
+        @if (TempData["Error"] is string error)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @error
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        }
+        @RenderBody()
+    </main>
+
+    <footer class="border-top py-3 text-secondary">
+        <div class="container">G4 ASP.NET · Curso ASP.NET Core · .NET 10 · EF Core · SQLite</div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

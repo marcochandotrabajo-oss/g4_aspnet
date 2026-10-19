@@ -1,0 +1,7 @@
+.git
+.vscode
+bin
+obj
+App_Data
+wwwroot/uploads/avatars/*
+!wwwroot/uploads/avatars/.gitkeep

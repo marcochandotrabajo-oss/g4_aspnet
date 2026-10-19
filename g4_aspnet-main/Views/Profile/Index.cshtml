@@ -1,0 +1,46 @@
+@model ProfileViewModel
+@inject ImageStorage ImageStorage
+@{
+    ViewData["Title"] = "Mi perfil";
+    var name = Model.User.DisplayName ?? Model.User.UserName ?? "Usuario";
+    var initial = string.IsNullOrWhiteSpace(name) ? "U" : name[..1].ToUpperInvariant();
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <h1 class="h2 mb-1">Mi perfil</h1>
+        <p class="text-secondary mb-0">Datos de la cuenta común a cualquier proyecto del curso.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-primary" asp-action="ChangePassword">Cambiar contraseña</a>
+        <a class="btn btn-primary" asp-action="Edit">Editar perfil</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-4">
+        <div class="d-flex align-items-center gap-3">
+            @if (ImageStorage.GetUrl(Model.User.AvatarFileName) is string avatarUrl)
+            {
+                <img class="avatar" src="@avatarUrl" alt="Avatar de @name" />
+            }
+            else
+            {
+                <span class="avatar avatar-placeholder">@initial</span>
+            }
+            <div>
+                <h2 class="h4 mb-1">@name</h2>
+                <p class="text-secondary mb-0">@Model.User.Email</p>
+            </div>
+        </div>
+        <hr />
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Usuario</dt>
+            <dd class="col-sm-9">@Model.User.UserName</dd>
+            <dt class="col-sm-3">Cuenta creada</dt>
+            <dd class="col-sm-9">@Model.User.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</dd>
+            <dt class="col-sm-3">Estado</dt>
+            <dd class="col-sm-9">@(Model.User.IsActive ? "Activa" : "Inactiva")</dd>
+        </dl>
+    </div>
+</div>

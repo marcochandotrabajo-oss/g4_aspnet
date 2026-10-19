@@ -1,0 +1,52 @@
+@model UserIndexViewModel
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <h1 class="h2 mb-1">Usuarios</h1>
+        <p class="text-secondary mb-0">Administración común para los proyectos de grupo.</p>
+    </div>
+    <a class="btn btn-primary" asp-action="Create">Nuevo usuario</a>
+</div>
+
+<form method="get" class="card card-body mb-4">
+    <div class="row g-2 align-items-end">
+        <div class="col-md">
+            <label asp-for="Search" class="form-label">Buscar</label>
+            <input asp-for="Search" class="form-control" placeholder="Usuario, nombre o email" />
+        </div>
+        <div class="col-md-auto"><button class="btn btn-primary" type="submit">Buscar</button></div>
+    </div>
+</form>
+
+@if (Model.Users.Count == 0)
+{
+    <div class="alert alert-info">No hay usuarios que coincidan con la búsqueda.</div>
+}
+else
+{
+    <div class="table-responsive border rounded">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr><th>Usuario</th><th>Rol</th><th>Estado</th><th></th></tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Users)
+                {
+                    var name = item.User.DisplayName ?? item.User.UserName ?? "Usuario";
+                    <tr>
+                        <td>
+                            <div class="fw-semibold">@name</div>
+                            <div class="small text-secondary">@item.User.Email · @item.User.UserName</div>
+                        </td>
+                        <td><span class="badge text-bg-secondary">@item.Role</span></td>
+                        <td><span class="badge @(item.User.IsActive ? "text-bg-success" : "text-bg-secondary")">@(item.User.IsActive ? "Activa" : "Inactiva")</span></td>
+                        <td class="text-end"><a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@item.User.Id">Ver</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
